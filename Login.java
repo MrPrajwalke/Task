@@ -3,10 +3,9 @@ import java.util.regex.Pattern;
 
 public class Login {
 
-    static Map<String, String> users = new HashMap<>(); // email -> password
+    static Map<String, String> users = new HashMap<>(); 
     static final int MAX_ATTEMPTS = 3;
-    static final Pattern EMAIL_PATTERN =
-            Pattern.compile("^[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,}$");
+
 
     public static void main(String[] args) {
         // Pre-populate with sample registered users
@@ -18,7 +17,6 @@ public class Login {
             menu(sc);
         }
     }
-
     static void menu(Scanner sc) {
         while (true) {
             System.out.println("\n1. Login  2. Register  3. Exit");
@@ -92,6 +90,34 @@ public class Login {
     static String readPassword(Scanner sc) {
         System.out.print("Enter password: ");
         return sc.nextLine().trim();
+
+
+            boolean loggedIn = false;
+            int attempts = 0;
+
+            while (attempts < MAX_ATTEMPTS && !loggedIn) {
+                System.out.print("Enter email: ");
+                String email = sc.nextLine().trim().toLowerCase();
+
+                System.out.print("Enter password: ");
+                String password = sc.nextLine().trim();
+
+                loggedIn = loginUser(email, password);
+                attempts++;
+
+                if (loggedIn) {
+                    System.out.println("Login successful! Welcome back, " + email + ".");
+                } else {
+                    int remaining = MAX_ATTEMPTS - attempts;
+                    if (remaining > 0) {
+                        System.out.println("Invalid email or password. Attempts left: " + remaining);
+                    } else {
+                        System.out.println("Login failed. Too many attempts.");
+                    }
+                }
+            }
+        }
+
     }
 
     static boolean loginUser(String email, String password) {
